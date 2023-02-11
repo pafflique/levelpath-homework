@@ -1,6 +1,6 @@
 import {useReducer} from 'react';
 import {initialState, reducer} from './state/reducer';
-import {ActionReceive, ActionType} from './state/actions';
+import {ActionHideError, ActionReceive, ActionRequest} from './state/actions';
 import {BirthsOnThisDayRepository} from './domain/birth';
 import View from './view/View';
 
@@ -12,19 +12,19 @@ function Presenter({repository}: PresenterProps) {
   const [{loading, error, list, today}, dispatch] = useReducer(reducer, initialState);
 
   async function fetch() {
-    dispatch({type: ActionType.Request});
+    dispatch(new ActionRequest());
     try {
       const list = await repository.getListForThisDay(today);
-      dispatch({type: ActionType.Receive, payload: {list, error: null}} as ActionReceive);
+      dispatch(new ActionReceive({list, error: null}));
     } catch (e) {
       const error = e instanceof Error ? e.message : 'Something went wrong.';
-      dispatch({type: ActionType.Receive, payload: {list: null, error}} as ActionReceive);
+      dispatch(new ActionReceive({list: null, error}));
     }
   }
 
   return (
     <View list={list} loading={loading} error={error} fetch={fetch}
-          close={() => dispatch({type: ActionType.HideError})}></View>
+          close={() => dispatch(new ActionHideError())}></View>
   );
 }
 
