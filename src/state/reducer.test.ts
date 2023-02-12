@@ -22,7 +22,12 @@ describe('reducer', () => {
   describe('receive', () => {
     test('data', () => {
       const list = [givenBirth()];
-      const state = reducer({...initialState, loading: true, list: [], error: {text: null, show: false}}, new ActionReceive({
+      const state = reducer({
+        ...initialState,
+        loading: true,
+        list: [],
+        error: {text: null, show: false}
+      }, new ActionReceive({
         error: null,
         list
       }));
@@ -34,7 +39,12 @@ describe('reducer', () => {
     });
 
     test('error', () => {
-      const state = reducer({...initialState, loading: true, list: [], error: {text: null, show: false}}, new ActionReceive({
+      const state = reducer({
+        ...initialState,
+        loading: true,
+        list: [],
+        error: {text: null, show: false}
+      }, new ActionReceive({
         error: 'error',
         list: null,
       }));
@@ -43,6 +53,23 @@ describe('reducer', () => {
       const error: FetchError = {text: 'error', show: true};
       expect(state.error).toEqual(error);
       expect(state.loading).toBe(false);
+    });
+
+    test('list is sorted by year asc', () => {
+      const item3 = givenBirth({year: 3});
+      const item1 = givenBirth({year: 1});
+      const item2 = givenBirth({year: 2});
+      const list = [item2, item3, item1];
+
+      const state = reducer({
+        ...initialState,
+        list: [],
+      }, new ActionReceive({
+        error: null,
+        list
+      }));
+
+      expect(state.list).toEqual([item1, item2, item3]);
     });
   });
 
