@@ -1,16 +1,26 @@
-import React from 'react';
+import React, {useReducer} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Presenter from './Presenter';
 import reportWebVitals from './reportWebVitals';
 import {BirthsOnThisDayRepositoryImpl} from './repository/births-on-this-day.repository';
+import {initialState, reducer} from './state/reducer';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+function Wrapper() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <Presenter state={state} dispatch={dispatch} repository={new BirthsOnThisDayRepositoryImpl()}/>
+  );
+}
+
 root.render(
   <React.StrictMode>
-    <Presenter repository={new BirthsOnThisDayRepositoryImpl()}/>
+    <Wrapper/>
   </React.StrictMode>
 );
 

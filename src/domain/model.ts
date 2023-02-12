@@ -21,7 +21,10 @@ export class BirthsOnThisDayListModel {
   }
 
   receive(error: string | null, list: Birth[] | null): this {
-    if (error !== null) this.showError(error);
+    if (error !== null) {
+      this.updateList([]);
+      this.showError(error);
+    }
     if (list !== null) this.updateList(list);
     this.loading = false;
 

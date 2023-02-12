@@ -1,16 +1,16 @@
-import {useReducer} from 'react';
-import {initialState, reducer} from './state/reducer';
-import {ActionHideError, ActionReceive, ActionRequest} from './state/actions';
+import {Action, ActionHideError, ActionReceive, ActionRequest} from './state/actions';
 import {BirthsOnThisDayRepository} from './domain/birth';
 import View from './view/View';
+import {State} from './state/state';
 
 interface PresenterProps {
   repository: BirthsOnThisDayRepository;
+  state: State;
+  dispatch: (action: Action) => void;
 }
 
-function Presenter({repository}: PresenterProps) {
-  const [{loading, error, list, today}, dispatch] = useReducer(reducer, initialState);
-
+function Presenter({repository, state, dispatch}: PresenterProps) {
+  const {loading, error, list, today} = state;
   async function fetch() {
     dispatch(new ActionRequest());
     try {
